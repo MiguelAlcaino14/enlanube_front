@@ -33,8 +33,21 @@ definitions:
         artifacts:
           - image.tar.gz
 
-    - step: &deploy
+    - step: &deploy_production
         name: Deploy
+        deployment: production
+        script:
+          - sh siroe-devops-scripts/droplets/04-deploy.sh
+
+    - step: &deploy_staging
+        name: Deploy
+        deployment: staging
+        script:
+          - sh siroe-devops-scripts/droplets/04-deploy.sh
+
+    - step: &deploy_test
+        name: Deploy
+        deployment: test
         script:
           - sh siroe-devops-scripts/droplets/04-deploy.sh
 
@@ -44,16 +57,16 @@ pipelines:
       - step: *clone_scripts
       - step: *prepare
       - step: *build_package
-      - step: *deploy
+      - step: *deploy_production
 
     develop:
       - step: *clone_scripts
       - step: *prepare
       - step: *build_package
-      - step: *deploy
+      - step: *deploy_staging
 
     "feature/**":
       - step: *clone_scripts
       - step: *prepare
       - step: *build_package
-      - step: *deploy
+      - step: *deploy_test
