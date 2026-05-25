@@ -1,0 +1,42 @@
+/* ── Navbar ── */
+@media (max-width: 768px) {
+  .nav-root { padding: 0 16px !important; }
+}
+@media (max-width: 480px) {
+  .nav-btn-secondary { display: none !important; }
+}
+
+/* ── Hero ── */
+@media (max-width: 768px) {
+  .hero-section { padding: 60px 20px 50px !important; }
+  .hero-title   { font-size: 32px !important; }
+}
+@media (max-width: 480px) {
+  .hero-title { font-size: 26px !important; }
+}
+
+/* ── Services grid ── */
+@media (max-width: 900px) {
+  .services-section { padding: 60px 20px !important; }
+  .services-grid    { grid-template-columns: repeat(2, 1fr) !important; }
+  .services-last    { width: 100% !important; min-width: unset !important; }
+}
+@media (max-width: 560px) {
+  .services-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ── Featured product ── */
+@media (max-width: 768px) {
+  .featured-section { padding: 40px 20px !important; }
+  .featured-inner   { padding: 24px !important; }
+}
+
+/* ── CTA ── */
+@media (max-width: 768px) {
+  .cta-section { padding: 60px 20px !important; }
+}
+
+/* ── Footer ── */
+@media (max-width: 768px) {
+  .footer-root { padding: 40px 20px 24px !important; }
+}

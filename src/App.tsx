@@ -1,3 +1,4 @@
+import "./responsive.css";
 import Box from "@cloudscape-design/components/box";
 import Button from "@cloudscape-design/components/button";
 import Container from "@cloudscape-design/components/container";
@@ -11,6 +12,7 @@ import Link from "@cloudscape-design/components/link";
 function Navbar() {
   return (
     <nav
+      className="nav-root"
       style={{
         position: "sticky",
         top: 0,
@@ -33,7 +35,9 @@ function Navbar() {
         />
       </div>
       <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-        <Button variant="normal">Portal Cliente</Button>
+        <span className="nav-btn-secondary">
+          <Button variant="normal">Portal Cliente</Button>
+        </span>
         <Button variant="primary">Cotizar</Button>
       </div>
     </nav>
@@ -44,6 +48,7 @@ function Navbar() {
 function Hero() {
   return (
     <section
+      className="hero-section"
       style={{
         background: "linear-gradient(160deg, #0d1220 0%, #0f1e38 50%, #071628 100%)",
         padding: "100px 40px 80px",
@@ -68,7 +73,7 @@ function Hero() {
       <div style={{ position: "relative", zIndex: 1, maxWidth: 680, margin: "0 auto" }}>
         <SpaceBetween size="l" direction="vertical">
           <Box variant="h1" color="inherit">
-            <span style={{ color: "#fff", fontSize: 48, fontWeight: 800, lineHeight: 1.1 }}>
+            <span className="hero-title" style={{ color: "#fff", fontSize: 48, fontWeight: 800, lineHeight: 1.1 }}>
               Hosting &amp;{" "}
               <span style={{ color: "#17c9ff" }}>Cloud</span>
             </span>
@@ -179,6 +184,7 @@ function ServicesSection() {
 
   return (
     <section
+      className="services-section"
       style={{
         background: "#0d1220",
         padding: "80px 40px",
@@ -198,13 +204,13 @@ function ServicesSection() {
               </Box>
             </SpaceBetween>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+          <div className="services-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
             {services.slice(0, 4).map((s) => (
               <ServiceCard key={s.title} {...s} />
             ))}
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <div style={{ width: "calc(25% - 8px)", minWidth: 220 }}>
+            <div className="services-last" style={{ width: "calc(25% - 8px)", minWidth: 220 }}>
               <ServiceCard {...services[4]} />
             </div>
           </div>
@@ -367,9 +373,10 @@ function DatacentersSection() {
 // ─── FEATURED PRODUCT SECTION ─────────────────────────────────────────────────
 function FeaturedProductSection() {
   return (
-    <section style={{ background: "#0d1220", padding: "60px 40px" }}>
+    <section className="featured-section" style={{ background: "#0d1220", padding: "60px 40px" }}>
       <div style={{ maxWidth: 1120, margin: "0 auto" }}>
         <div
+          className="featured-inner"
           style={{
             background: "linear-gradient(135deg, #0f2240 0%, #0a1830 60%, #071220 100%)",
             borderRadius: 16,
@@ -503,6 +510,7 @@ function FeaturedProductSection() {
 function CtaSection() {
   return (
     <section
+      className="cta-section"
       style={{
         background: "linear-gradient(180deg, #091828 0%, #0d1220 100%)",
         padding: "80px 40px",
@@ -562,6 +570,7 @@ function Footer() {
 
   return (
     <footer
+      className="footer-root"
       style={{
         background: "#070e1a",
         borderTop: "1px solid rgba(255,255,255,0.07)",
