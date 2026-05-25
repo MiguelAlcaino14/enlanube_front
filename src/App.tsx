@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import "./responsive.css";
 import Box from "@cloudscape-design/components/box";
 import Button from "@cloudscape-design/components/button";
@@ -7,6 +8,39 @@ import Icon from "@cloudscape-design/components/icon";
 import SpaceBetween from "@cloudscape-design/components/space-between";
 import Badge from "@cloudscape-design/components/badge";
 import Link from "@cloudscape-design/components/link";
+
+const WA_URL: string | null = null; // pendiente: asignar número WhatsApp
+
+function openWhatsApp() {
+  if (!WA_URL) {
+    alert("Número de contacto aún no disponible. Por favor intenta más tarde.");
+    return;
+  }
+  window.open(WA_URL, "_blank", "noopener");
+}
+
+function scrollTo(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+}
+
+// ─── SCROLL REVEAL ───────────────────────────────────────────────────────────
+function useScrollReveal() {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            observer.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
 
 // ─── NAV ────────────────────────────────────────────────────────────────────
 function Navbar() {
@@ -29,16 +63,16 @@ function Navbar() {
     >
       <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
         <img
-          src="/ChatGPT_Image_19_may_2026,_17_10_11_(1).png"
+          src="/logo.png"
           alt="enlanube"
           style={{ height: 110, width: "auto", display: "block" }}
         />
       </div>
       <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
         <span className="nav-btn-secondary">
-          <Button variant="normal">Portal Cliente</Button>
+          <Button variant="normal" href="https://portal.enlanube.cl" target="_blank">Portal Cliente</Button>
         </span>
-        <Button variant="primary">Cotizar</Button>
+        <Button variant="primary" onClick={openWhatsApp}>Cotizar</Button>
       </div>
     </nav>
   );
@@ -57,7 +91,6 @@ function Hero() {
         overflow: "hidden",
       }}
     >
-      {/* Glow effects */}
       <div
         style={{
           position: "absolute",
@@ -83,8 +116,8 @@ function Hero() {
             Dedicados y Disaster Recovery con soporte local.
           </Box>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <Button variant="primary">Hablar con un Especialista</Button>
-            <Button variant="normal">Conocer enlanube</Button>
+            <Button variant="primary" onClick={openWhatsApp}>Hablar con un Especialista</Button>
+            <Button variant="normal" onClick={() => scrollTo("servicios")}>Conocer enlanube</Button>
           </div>
         </SpaceBetween>
       </div>
@@ -136,7 +169,7 @@ function ServiceCard({ icon, title, description, extra }: ServiceCardProps) {
             {description}
           </Box>
           {extra && (
-            <Link variant="primary" fontSize="body-s">
+            <Link variant="primary" fontSize="body-s" onFollow={openWhatsApp}>
               {extra} →
             </Link>
           )}
@@ -184,7 +217,8 @@ function ServicesSection() {
 
   return (
     <section
-      className="services-section"
+      id="servicios"
+      className="services-section reveal"
       style={{
         background: "#0d1220",
         padding: "80px 40px",
@@ -230,7 +264,7 @@ interface DatacenterCardProps {
   tags: string[];
 }
 
-function DatacenterCard({ flag, city, state, tier, description, tags }: DatacenterCardProps) {
+function DatacenterCard({ flag, city, tier, description, tags }: DatacenterCardProps) {
   return (
     <Container
       fitHeight
@@ -331,6 +365,7 @@ function DatacentersSection() {
 
   return (
     <section
+      className="reveal"
       style={{
         background: "linear-gradient(180deg, #0d1220 0%, #091828 100%)",
         padding: "80px 40px",
@@ -373,7 +408,7 @@ function DatacentersSection() {
 // ─── FEATURED PRODUCT SECTION ─────────────────────────────────────────────────
 function FeaturedProductSection() {
   return (
-    <section className="featured-section" style={{ background: "#0d1220", padding: "60px 40px" }}>
+    <section className="featured-section reveal" style={{ background: "#0d1220", padding: "60px 40px" }}>
       <div style={{ maxWidth: 1120, margin: "0 auto" }}>
         <div
           className="featured-inner"
@@ -386,7 +421,6 @@ function FeaturedProductSection() {
             overflow: "hidden",
           }}
         >
-          {/* Background glow */}
           <div
             style={{
               position: "absolute",
@@ -455,13 +489,12 @@ function FeaturedProductSection() {
                   ))}
                 </Grid>
                 <div>
-                  <Button variant="primary" iconName="external" iconAlign="right">
+                  <Button variant="primary" iconName="external" iconAlign="right" onClick={openWhatsApp}>
                     Conocer CloudServer
                   </Button>
                 </div>
               </SpaceBetween>
             </div>
-            {/* Right side decoration */}
             <div
               style={{
                 display: "flex",
@@ -491,7 +524,7 @@ function FeaturedProductSection() {
                       style={{
                         height: 6,
                         width: `${w}%`,
-                        background: `linear-gradient(90deg, #17c9ff, rgba(23,201,255,0.3))`,
+                        background: "linear-gradient(90deg, #17c9ff, rgba(23,201,255,0.3))",
                         borderRadius: 3,
                       }}
                     />
@@ -510,7 +543,7 @@ function FeaturedProductSection() {
 function CtaSection() {
   return (
     <section
-      className="cta-section"
+      className="cta-section reveal"
       style={{
         background: "linear-gradient(180deg, #091828 0%, #0d1220 100%)",
         padding: "80px 40px",
@@ -536,14 +569,8 @@ function CtaSection() {
               </Box>
             </SpaceBetween>
           </div>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Button variant="primary">Solicitar Cotización</Button>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+            <Button variant="primary" onClick={openWhatsApp}>Solicitar Cotización</Button>
           </div>
         </Grid>
       </div>
@@ -586,11 +613,10 @@ function Footer() {
             { colspan: { default: 12, s: 3 } },
           ]}
         >
-          {/* Brand col */}
           <div>
             <SpaceBetween size="m" direction="vertical">
               <img
-                src="/ChatGPT_Image_19_may_2026,_17_10_11_(1).png"
+                src="/logo.png"
                 alt="enlanube"
                 style={{ height: 36, width: "auto", display: "block" }}
               />
@@ -614,7 +640,6 @@ function Footer() {
               </div>
             </SpaceBetween>
           </div>
-          {/* Link cols */}
           {cols.map((col) => (
             <div key={col.title}>
               <SpaceBetween size="s" direction="vertical">
@@ -658,8 +683,51 @@ function Footer() {
   );
 }
 
+// ─── WHATSAPP BUTTON ─────────────────────────────────────────────────────────
+function WhatsAppButton() {
+  return (
+    <a
+      href={WA_URL ?? "#"}
+      onClick={WA_URL ? undefined : (e) => { e.preventDefault(); openWhatsApp(); }}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Contactar por WhatsApp"
+      style={{
+        position: "fixed",
+        bottom: 28,
+        right: 28,
+        zIndex: 2000,
+        width: 56,
+        height: 56,
+        borderRadius: "50%",
+        background: "#25d366",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        boxShadow: "0 4px 16px rgba(37,211,102,0.4)",
+        transition: "transform 0.2s, box-shadow 0.2s",
+        textDecoration: "none",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1.1)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 6px 20px rgba(37,211,102,0.55)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.transform = "scale(1)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 16px rgba(37,211,102,0.4)";
+      }}
+    >
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+    </a>
+  );
+}
+
 // ─── APP ──────────────────────────────────────────────────────────────────────
 export default function App() {
+  useScrollReveal();
+
   return (
     <div style={{ background: "#0d1220", minHeight: "100vh", fontFamily: "'Open Sans', 'Helvetica Neue', Roboto, Arial, sans-serif" }}>
       <Navbar />
@@ -669,6 +737,7 @@ export default function App() {
       <FeaturedProductSection />
       <CtaSection />
       <Footer />
+      <WhatsAppButton />
     </div>
   );
 }
