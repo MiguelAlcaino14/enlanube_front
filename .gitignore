@@ -5,6 +5,9 @@ dist/
 # Env
 .env
 
+# bolt.new metadata
+.bolt/
+
 # Compiled Java class files
 *.class
 
