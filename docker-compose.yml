@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  app:
+    image: siroe/enlanube-front:latest
+    container_name: enlanube-front
+    restart: always
+    networks:
+      - traefik_default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_default"
+
+      # HTTPS
+      - traefik.http.routers.enlanube-front.rule=Host("enlanube.cl") || Host("www.enlanube.cl")
+      - "traefik.http.routers.enlanube-front.entrypoints=websecure"
+      - "traefik.http.routers.enlanube-front.tls=true"
+      - "traefik.http.routers.enlanube-front.tls.certresolver=le"
+
+      # HTTP → HTTPS
+      - traefik.http.routers.enlanube-front-http.rule=Host("enlanube.cl") || Host("www.enlanube.cl")
+      - "traefik.http.routers.enlanube-front-http.entrypoints=web"
+      - "traefik.http.routers.enlanube-front-http.middlewares=redirect-https"
+
+      - "traefik.http.middlewares.redirect-https.redirectscheme.scheme=https"
+
+      # Puerto
+      - "traefik.http.services.enlanube-front.loadbalancer.server.port=80"
+
+networks:
+  traefik_default:
+    external: true
