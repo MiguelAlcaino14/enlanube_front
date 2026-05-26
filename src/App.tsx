@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./responsive.css";
+import CotizacionModal from "./components/CotizacionModal";
 import Box from "@cloudscape-design/components/box";
 import Button from "@cloudscape-design/components/button";
 import Container from "@cloudscape-design/components/container";
@@ -22,6 +23,9 @@ function openWhatsApp() {
 function scrollTo(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
+
+let _openModal: (() => void) | null = null;
+function openModal() { _openModal?.(); }
 
 // ─── SCROLL REVEAL ───────────────────────────────────────────────────────────
 function useScrollReveal() {
@@ -72,7 +76,7 @@ function Navbar() {
         <span className="nav-btn-secondary">
           <Button variant="normal" href="https://portal.enlanube.cl" target="_blank">Portal Cliente</Button>
         </span>
-        <Button variant="primary" onClick={openWhatsApp}>Cotizar</Button>
+        <Button variant="primary" onClick={openModal}>Cotizar</Button>
       </div>
     </nav>
   );
@@ -116,7 +120,7 @@ function Hero() {
             Dedicados y Disaster Recovery con soporte local.
           </Box>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            <Button variant="primary" onClick={openWhatsApp}>Hablar con un Especialista</Button>
+            <Button variant="primary" onClick={openModal}>Hablar con un Especialista</Button>
             <Button variant="normal" onClick={() => scrollTo("servicios")}>Conocer enlanube</Button>
           </div>
         </SpaceBetween>
@@ -489,7 +493,7 @@ function FeaturedProductSection() {
                   ))}
                 </Grid>
                 <div>
-                  <Button variant="primary" iconName="external" iconAlign="right" onClick={openWhatsApp}>
+                  <Button variant="primary" iconName="external" iconAlign="right" onClick={openModal}>
                     Conocer CloudServer
                   </Button>
                 </div>
@@ -570,7 +574,7 @@ function CtaSection() {
             </SpaceBetween>
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
-            <Button variant="primary" onClick={openWhatsApp}>Solicitar Cotización</Button>
+            <Button variant="primary" onClick={openModal}>Solicitar Cotización</Button>
           </div>
         </Grid>
       </div>
@@ -727,6 +731,8 @@ function WhatsAppButton() {
 // ─── APP ──────────────────────────────────────────────────────────────────────
 export default function App() {
   useScrollReveal();
+  const [modalVisible, setModalVisible] = useState(false);
+  _openModal = () => setModalVisible(true);
 
   return (
     <div style={{ background: "#0d1220", minHeight: "100vh", fontFamily: "'Open Sans', 'Helvetica Neue', Roboto, Arial, sans-serif" }}>
@@ -738,6 +744,7 @@ export default function App() {
       <CtaSection />
       <Footer />
       <WhatsAppButton />
+      <CotizacionModal visible={modalVisible} onClose={() => setModalVisible(false)} />
     </div>
   );
 }
